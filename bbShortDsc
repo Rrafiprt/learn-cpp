@@ -1,0 +1,30 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int Data[5] = {12, 7, 4, 8, 17};
+    cout << "Data sebelum Bubble Short: " << endl;
+    for (int x = 0; x < 5; x++) {
+        cout << Data[x] << " ";
+    }
+    cout << endl;
+
+    int tmp;
+    for (int x = 0; x < 5 - 1; x++) {
+        for (int y = 0; y < 5 - x - 1; y++) {
+            if (Data[y] > Data[y + 1]) {
+            tmp = Data[y];
+            Data[y] = Data[y + 1];
+            Data[y + 1] = tmp;
+            }
+        }
+
+    }
+    cout << "Data setelah Bubble Short: " << endl;
+    for (int x = 0; x < 5; x++) {
+        cout << Data[x] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
