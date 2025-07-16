@@ -1,0 +1,163 @@
+#include <iostream>
+using namespace std;
+
+// Kelas untuk merepresentasikan simpul pada doubly linked list
+class ListNode {
+public:
+    string val;
+    ListNode* prev;  // pointer ke node sebelumnya
+    ListNode* next;  // pointer ke node setelahnya
+
+    // Konstruktor untuk inisialisasi node
+    ListNode(const string& value = "", ListNode* previous = nullptr, ListNode* nextNode = nullptr)
+        : val(value), prev(previous), next(nextNode) {}
+};
+
+// Kelas utama untuk Doubly Linked List
+class DoublyLinkedList {
+public:
+    ListNode* head;  // pointer ke elemen pertama
+    ListNode* tail;  // pointer ke elemen terakhir
+
+    // Konstruktor untuk inisialisasi linked list kosong
+    DoublyLinkedList() : head(nullptr), tail(nullptr) {}
+
+    // Menambahkan elemen di awal list
+    void add_first(const string& val) {
+        ListNode* new_node = new ListNode(val);
+        if (!head) {  // jika list kosong
+            head = tail = new_node;
+        } else {
+            new_node->next = head;
+            head->prev = new_node;
+            head = new_node;
+        }
+    }
+
+    // Menambahkan elemen di akhir list
+    void add_last(const string& val) {
+        ListNode* new_node = new ListNode(val);
+        if (!head) {  // jika list kosong
+            head = tail = new_node;
+        } else {
+            new_node->prev = tail;
+            tail->next = new_node;
+            tail = new_node;
+        }
+    }
+
+    // Menambahkan elemen di posisi tertentu
+    void add_at_pos(const string& val, int pos) {
+        ListNode* new_node = new ListNode(val);
+        if (pos == 0) {  // jika di posisi pertama
+            add_first(val);
+        } else {
+            ListNode* curr_node = head;
+            for (int i = 0; i < pos - 1; ++i) {
+                if (!curr_node) return;  // jika posisi melebihi panjang list
+                curr_node = curr_node->next;
+            }
+            if (!curr_node) {
+                add_last(val);  // jika node di posisi sebelumnya tidak ada, tambahkan di akhir
+            } else {
+                new_node->prev = curr_node;
+                new_node->next = curr_node->next;
+                curr_node->next = new_node;
+                if (new_node->next) {
+                    new_node->next->prev = new_node;
+                }
+            }
+        }
+    }
+
+    // Menghapus elemen pertama
+    void remove_first() {
+        if (!head) return;  // jika kosong, langsung keluar
+        if (head == tail) {  // hanya satu elemen
+            delete head;
+            head = tail = nullptr;
+        } else {
+            head = head->next;
+            delete head->prev;  // hapus node sebelumnya
+            head->prev = nullptr;
+        }
+    }
+
+    // Menghapus elemen terakhir
+    void remove_last() {
+        if (!head) return;
+        if (head == tail) {
+            delete tail;
+            head = tail = nullptr;
+        } else {
+            tail = tail->prev;
+            delete tail->next;  // hapus node sebelumnya
+            tail->next = nullptr;
+        }
+    }
+
+    // Menghapus elemen di posisi tertentu
+    void remove_at_pos(int pos) {
+        if (!head) return;
+        if (pos == 0) {
+            remove_first();
+        } else {
+            ListNode* curr_node = head;
+            for (int i = 0; i < pos; ++i) {
+                if (!curr_node) return;  // posisi di luar list
+                curr_node = curr_node->next;
+            }
+            if (!curr_node) return;
+            curr_node->prev->next = curr_node->next;
+            if (curr_node->next) {
+                curr_node->next->prev = curr_node->prev;
+            }
+            delete curr_node;
+        }
+    }
+
+    // Menambahkan beberapa nilai ke list dari array
+    void add_values(const string* data_list, int size) {
+        for (int i = 0; i < size; ++i) {
+            add_last(data_list[i]);
+        }
+    }
+
+    // Mengubah isi linked list menjadi string
+    string to_string() {
+        ListNode* curr_node = head;
+        string result;
+        while (curr_node) {
+            result += curr_node->val;
+            if (curr_node->next) {
+                result += "<->";  // simbol penghubung antar node
+            }
+            curr_node = curr_node->next;
+        }
+        return result;
+    }
+};
+
+int main() {
+    DoublyLinkedList dll;
+
+    // Isi awal list dari array
+    string npm[] = {"40", "24"};
+    int size = sizeof(npm) / sizeof(npm[0]);
+    dll.add_values(npm, size); 
+    cout << "==List awal==\n" << dll.to_string() << endl;
+    
+    // Menambahkan elemen ke list
+    dll.add_first("30");
+    dll.add_last("88");
+    dll.add_at_pos("48", 3);
+    
+    cout << "\n==List setelah ditambah==\n" << dll.to_string() << endl;
+
+    // Menghapus elemen dari list
+    dll.remove_at_pos(1);
+    dll.remove_first();
+    dll.remove_last();
+
+    cout << "\n==List setelah dihapus==\n" << dll.to_string() << endl;
+}
