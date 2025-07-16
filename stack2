@@ -1,0 +1,30 @@
+#include <iostream>
+#include <stack>
+using namespace std;
+
+int main() {
+    stack<string> buah;
+    string data;
+    
+    cout << "Masukkan 5 data untuk stack:" << endl;
+    for (int i = 0; i < 5; i++) {
+        cout << "Masukkan data: ";
+        cin >> data;
+        buah.push(data);
+    }
+
+    cout << "\nStack setelah push:" << endl;
+    cout << "Top dari stack: " << (buah.empty() ? "Stack kosong" : buah.top()) << endl;
+    cout << "Size dari stack: " << buah.size() << endl;
+    cout << "Apakah stack kosong?: " << (buah.empty() ? 1 : 0) << endl;
+
+    if (!buah.empty()) {
+        cout << "Data yang di-pop: " << buah.top() << endl;
+        buah.pop();
+    }
+    
+    cout << "Top setelah pop: " << (buah.empty() ? "Stack kosong" : buah.top()) << endl;
+    cout << "Size setelah pop: " << buah.size() << endl;
+
+    return 0;
+}
